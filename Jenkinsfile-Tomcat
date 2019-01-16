@@ -1,0 +1,27 @@
+node('master') {
+    sh "hostname"
+    sh "cd /tmp/helloworld-master"
+
+}
+
+
+node('swarm-g1') {
+    sh "hostname"
+    
+
+    stage('clean') {
+    sh 'docker ps -f name=mytomcat -q | xargs --no-run-if-empty docker container stop'
+	sh 'docker container ls -a -fname=mytomcat -q | xargs -r docker container rm'
+	
+}
+
+
+
+    stage('Production') {
+	
+    sh "docker run -dP --name mytomcat -p 8085:80 angautam/tomcat"
+}
+
+    
+    
+}
